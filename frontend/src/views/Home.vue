@@ -40,9 +40,11 @@
         </select>
 
         <label for="city">Cidade</label>
-        <select v-model="state">
+        <select v-model="city">
           <option disabled value="disabled">Escolha uma cidade</option>
-          <option v-for="city in cities" :key="city.id">{{ city.nome }}</option>
+          <option v-for="city in cities" :key="city.id" :value="city.nome">{{
+            city.nome
+          }}</option>
         </select>
 
         <button>Cadastrar</button>
@@ -116,7 +118,6 @@ export default {
         `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${this.state}/distritos`
       );
 
-      console.log(data);
       this.cities = data;
     },
     show() {
@@ -142,7 +143,7 @@ export default {
         this.$store
           .dispatch("newLocation", newLocation)
           .then(() => {
-            this.getLocations();
+            this.locations = this.getLocations();
             this.hide();
           })
           .catch(error => {
@@ -150,6 +151,9 @@ export default {
           });
       });
     }
+  },
+  created() {
+    document.title = "Início";
   }
 };
 </script>
