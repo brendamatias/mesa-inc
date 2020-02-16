@@ -15,7 +15,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -54,5 +54,23 @@ ul {
 
 button {
   cursor: pointer;
+}
+
+.vt-notification {
+  max-height: 200px;
+
+  h2,
+  p {
+    font-size: 14px !important;
+  }
+
+  .vt-circle {
+    border-width: 0 !important;
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

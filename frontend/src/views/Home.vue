@@ -5,7 +5,13 @@
 
       <form v-on:submit.prevent="createNewLocation">
         <label for="street">Nome</label>
-        <input name="name" type="text" id="name" v-model="newLocation.name" />
+        <input
+          name="name"
+          type="text"
+          id="name"
+          v-model="newLocation.name"
+          required
+        />
 
         <label for="street">Rua</label>
         <input
@@ -13,6 +19,7 @@
           type="text"
           id="street"
           v-model="newLocation.street"
+          required
         />
 
         <label for="number">Número</label>
@@ -21,6 +28,7 @@
           type="text"
           id="number"
           v-model="newLocation.number"
+          required
         />
 
         <label for="neighborhood">Bairro</label>
@@ -29,12 +37,13 @@
           type="text"
           id="neighborhood"
           v-model="newLocation.neighborhood"
+          required
         />
 
         <label for="state">Estado</label>
         <select v-model="state" v-on:change="getCities">
           <option disabled value="disabled">Escolha um estado</option>
-          <option v-for="state in states" :key="state.id" :value="state.id">{{
+          <option v-for="state in states" :key="state.id" :value="state">{{
             state.sigla
           }}</option>
         </select>
@@ -115,7 +124,7 @@ export default {
     },
     async getCities() {
       const { data } = await axios.get(
-        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${this.state}/distritos`
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${this.state.id}/distritos`
       );
 
       this.cities = data;
@@ -127,9 +136,21 @@ export default {
       this.$modal.hide("new-location");
     },
     async createNewLocation() {
+      console.log(this.state.sigla);
+      if (this.state === "disabled") {
+        return this.$vToastify.error("Necessário informar o estado.", "Erro");
+      }
+      if (this.city === "disabled") {
+        return this.$vToastify.error("Necessário informar a cidade.", "Erro");
+      }
+
       let name = this.newLocation.name;
       let street = this.newLocation.street.trim().replace(/ /g, "+");
-      let location = this.newLocation.number + "+" + street + "+Recife+PE";
+      let city = this.city.trim().replace(/ /g, "+");
+      let uf = this.state.sigla;
+
+      let location =
+        this.newLocation.number + "+" + street + "+" + city + "+" + uf;
 
       const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBJSI1G4JlXXbceQiPksP8cgo8OMd1TQ4A`;
 
@@ -140,14 +161,19 @@ export default {
           latitude: res.data.results[0].geometry.location.lat,
           longitude: res.data.results[0].geometry.location.lng
         };
+
         this.$store
           .dispatch("newLocation", newLocation)
           .then(() => {
+            this.$vToastify.success(
+              "Localização cadastrada com sucesso!",
+              "Sucesso"
+            );
             this.locations = this.getLocations();
             this.hide();
           })
           .catch(error => {
-            this.errors.push(error);
+            this.$vToastify.error(error, "Error");
           });
       });
     }
