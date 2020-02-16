@@ -27,6 +27,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getUser(context) {
+      return api.get("/users").then(response => {
+        context.commit("UPDATE_USER", response.data);
+        context.commit("UPDATE_LOGIN", true);
+      });
+    },
     signUp(context, payload) {
       return api.post("/users", payload).then(res => {
         context.commit("UPDATE_USER", payload);

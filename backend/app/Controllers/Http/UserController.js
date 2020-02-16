@@ -9,6 +9,12 @@ const User = use("App/Models/User");
 const Hash = use("Hash");
 
 class UserController {
+  async show({ auth }) {
+    const user = await User.findOrFail(auth.user.id);
+
+    return user;
+  }
+
   async store({ request, response }) {
     const data = request.only(["name", "email", "password"]);
     const err = await validateStore(data);

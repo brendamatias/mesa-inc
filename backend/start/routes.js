@@ -9,6 +9,7 @@ Route.post("passwords", "ForgotPasswordController.store");
 Route.put("passwords", "ForgotPasswordController.update");
 
 Route.group(() => {
+  Route.get("users", "UserController.show");
   Route.put("users", "UserController.update");
 
   Route.resource("locations", "LocationController").apiOnly();

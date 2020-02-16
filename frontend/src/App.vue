@@ -11,7 +11,15 @@ import Default from "./views/_layouts/Default.vue";
 
 export default {
   name: "App",
-  components: { Auth, Default }
+  components: { Auth, Default },
+  created() {
+    if (window.localStorage.token) {
+      this.$store.dispatch("getUser").catch(() => {
+        this.$router.push({ name: "signin" });
+        window.localStorage.removeItem("token");
+      });
+    }
+  }
 };
 </script>
 
