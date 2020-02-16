@@ -27,18 +27,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    newUser(context, payload) {
-      context.commit("UPDATE_USER", { id: payload.email });
-      return api.post("/users", payload);
+    signUp(context, payload) {
+      return api.post("/users", payload).then(res => {
+        context.commit("UPDATE_USER", payload);
+        context.commit("UPDATE_LOGIN", true);
+        window.localStorage.token = `Bearer ${res.data.token.token}`;
+      });
     },
     signIn(context, payload) {
-      return api.post("/sessions", payload).then(response => {
-        if (response.data.status === "error") {
-          console.log(response.data);
+      return api.post("/sessions", payload).then(res => {
+        if (res.data.status === "error") {
+          console.log(res.data);
         } else {
-          context.commit("UPDATE_USER", response.data.user);
+          context.commit("UPDATE_USER", res.data.user);
           context.commit("UPDATE_LOGIN", true);
-          window.localStorage.token = `Bearer ${response.data.token.token}`;
+          window.localStorage.token = `Bearer ${res.data.token.token}`;
         }
       });
     },

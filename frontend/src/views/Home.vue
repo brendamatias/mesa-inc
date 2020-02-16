@@ -112,7 +112,6 @@ export default {
       this.states = data;
     },
     async getCities() {
-      console.log("oi");
       const { data } = await axios.get(
         `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${this.state}/distritos`
       );

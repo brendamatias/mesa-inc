@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <Auth v-if="$store.state.signed" />
-    <Login v-else />
+    <Default v-if="$store.state.signed" />
+    <Auth v-else />
   </div>
 </template>
 
 <script>
-import Login from "./views/Login.vue";
 import Auth from "./views/_layouts/Auth.vue";
+import Default from "./views/_layouts/Default.vue";
 
 export default {
   name: "App",
-  components: { Login, Auth }
+  components: { Auth, Default }
 };
 </script>
 
