@@ -15,6 +15,7 @@ class LocationSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("SET NULL");
       table.string("name").notNullable();
+      table.string("address").notNullable();
       table.float("latitude").notNullable();
       table.float("longitude").notNullable();
       table.timestamps();

@@ -6,15 +6,18 @@ class UserController {
   async store({ request, response }) {
     const data = request.only(["name", "email", "password"]);
 
-    const userExists = await User.query()
-      .where("email", data.email)
-      .fetch();
+    //VERIFICAR
+    // const userExists = await User.query()
+    //   .where("email", data.email)
+    //   .fetch();
 
-    if (userExists) {
-      return response.status(400).send({
-        error: { message: "Email já cadastrado." }
-      });
-    }
+    // console.log(userExists);
+
+    // if (userExists) {
+    //   return response.status(400).send({
+    //     error: { message: "Email já cadastrado." }
+    //   });
+    // }
 
     const user = await User.create(data);
 
