@@ -23,7 +23,6 @@
       placeholder="Confirme a nova senha"
       v-model="user.confirmPassword"
     />
-
     <button type="submit">
       <font-awesome-icon icon="save" />Salvar perfil
     </button>
@@ -45,7 +44,6 @@ export default {
   },
   data() {
     return {
-      errors: [],
       user: {
         oldPassword: "",
         password: "",
@@ -55,15 +53,22 @@ export default {
   },
   methods: {
     updateUser() {
-      this.errors = [];
+      const user = {
+        name: this.$store.state.user.name,
+        email: this.$store.state.user.email,
+        password: this.user.password,
+        oldPassword: this.user.oldPassword,
+        confirmPassword: this.user.confirmPassword
+      };
 
+      console.log(user);
       api
-        .put("/users", this.$store.state.user)
+        .put("/users", user)
         .then(() => {
-          console.log("Sucesso");
+          this.$vToastify.success("Perfil atualizado com sucesso!", "Sucesso");
         })
-        .catch(error => {
-          this.errors.push(error.response.data.message);
+        .catch(function(error) {
+          console.log(error);
         });
     }
   }
