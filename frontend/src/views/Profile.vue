@@ -1,7 +1,18 @@
 <template>
   <form v-on:submit.prevent="updateUser">
-    <input name="name" placeholder="Seu nome completo" v-model="name" />
-    <input name="email" type="email" placeholder="Seu e-mail" v-model="email" />
+    <input
+      name="name"
+      placeholder="Seu nome completo"
+      v-model="name"
+      required
+    />
+    <input
+      name="email"
+      type="email"
+      placeholder="Seu e-mail"
+      v-model="email"
+      required
+    />
 
     <hr />
 
@@ -61,16 +72,37 @@ export default {
         confirmPassword: this.user.confirmPassword
       };
 
-      console.log(user);
+      if (user.oldPassword) {
+        if (!user.password) {
+          return this.$vToastify.error(
+            "O campo de senha não pode estar vazio.",
+            "Erro"
+          );
+        }
+
+        if (!user.confirmPassword) {
+          return this.$vToastify.error(
+            "O campo de confirmação de senha não pode estar vazio.",
+            "Erro"
+          );
+        }
+      }
+
       api
         .put("/users", user)
         .then(() => {
           this.$vToastify.success("Perfil atualizado com sucesso!", "Sucesso");
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(() => {
+          this.$vToastify.error(
+            "Ocorreu um erro na atualização do seu perfil. Verifique seus dados.",
+            "Erro"
+          );
         });
     }
+  },
+  created() {
+    document.title = "Perfil";
   }
 };
 </script>

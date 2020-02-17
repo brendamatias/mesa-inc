@@ -9,10 +9,16 @@
 
       <form v-on:submit.prevent="signUp">
         <label for="name">Nome</label>
-        <input name="name" type="name" id="name" v-model="user.name" />
+        <input name="name" type="name" id="name" v-model="user.name" required />
 
         <label for="email">E-mail</label>
-        <input name="email" type="email" id="email" v-model="user.email" />
+        <input
+          name="email"
+          type="email"
+          id="email"
+          v-model="user.email"
+          required
+        />
 
         <label for="password">
           Senha
@@ -22,6 +28,7 @@
           name="password"
           id="password"
           v-model="user.password"
+          required
         />
 
         <button>Cadastrar</button>
@@ -58,8 +65,11 @@ export default {
         .then(() => {
           this.$router.push({ name: "home" });
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
+          this.$vToastify.error(
+            "Ocorreu um erro. Verifique seus dados.",
+            "Erro"
+          );
         });
     }
   },

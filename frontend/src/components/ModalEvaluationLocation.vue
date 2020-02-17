@@ -119,8 +119,12 @@ export default {
 
           this.hide();
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(() => {
+          this.$vToastify.error(
+            "Ops, ocorreu um erro interno. Verifique os dados.",
+            "Erro"
+          );
+          this.hide();
         });
     }
   }

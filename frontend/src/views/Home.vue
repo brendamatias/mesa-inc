@@ -61,8 +61,6 @@ import ModalDetailsLocation from "../components/ModalDetailsLocation";
 import ModalEvaluationLocation from "../components/ModalEvaluationLocation";
 import GoogleMap from "../components/GoogleMap";
 
-import axios from "axios";
-
 export default {
   name: "home",
   components: {
@@ -91,47 +89,6 @@ export default {
     showDetails(modal, selectLocation) {
       this.$modal.show(modal);
       console.log(selectLocation);
-    },
-    async createNewLocation() {
-      if (this.state === "disabled") {
-        return this.$vToastify.error("Necessário informar o estado.", "Erro");
-      }
-      if (this.city === "disabled") {
-        return this.$vToastify.error("Necessário informar a cidade.", "Erro");
-      }
-
-      let name = this.newLocation.name;
-      let street = this.newLocation.street.trim().replace(/ /g, "+");
-      let city = this.city.trim().replace(/ /g, "+");
-      let uf = this.state.sigla;
-
-      let location =
-        this.newLocation.number + "+" + street + "+" + city + "+" + uf;
-
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyBJSI1G4JlXXbceQiPksP8cgo8OMd1TQ4A`;
-
-      axios.get(url).then(res => {
-        const newLocation = {
-          name,
-          address: res.data.results[0].formatted_address,
-          latitude: res.data.results[0].geometry.location.lat,
-          longitude: res.data.results[0].geometry.location.lng
-        };
-
-        this.$store
-          .dispatch("newLocation", newLocation)
-          .then(() => {
-            this.$vToastify.success(
-              "Localização cadastrada com sucesso!",
-              "Sucesso"
-            );
-            this.locations = this.getLocations();
-            this.hide();
-          })
-          .catch(error => {
-            this.$vToastify.error(error, "Error");
-          });
-      });
     }
   },
   created() {

@@ -45,20 +45,21 @@ export default {
       user: {
         email: "brenda@mesainc.com.br",
         password: "1234567"
-      },
-      errors: []
+      }
     };
   },
   methods: {
     signIn() {
-      this.errors = [];
       this.$store
         .dispatch("signIn", this.user)
         .then(() => {
           this.$router.push({ name: "home" });
         })
-        .catch(error => {
-          this.errors.push(error);
+        .catch(() => {
+          this.$vToastify.error(
+            "Ocorreu um erro. Verifique seus dados.",
+            "Erro"
+          );
         });
     }
   },

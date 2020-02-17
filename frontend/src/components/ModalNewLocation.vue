@@ -55,7 +55,12 @@
         }}</option>
       </select>
 
-      <button>Cadastrar</button>
+      <div class="btns">
+        <button class="btn-cancelar" @click="hide">Cancelar</button>
+        <button type="submit" class="btn">
+          Cadastrar
+        </button>
+      </div>
     </form>
   </div>
 </template>
@@ -104,7 +109,6 @@ export default {
       this.$modal.hide("new-location");
     },
     async createNewLocation() {
-      console.log(this.state.sigla);
       if (this.state === "disabled") {
         return this.$vToastify.error("Necessário informar o estado.", "Erro");
       }
@@ -137,11 +141,15 @@ export default {
               "Localização cadastrada com sucesso!",
               "Sucesso"
             );
-            this.locations = this.getLocations();
             this.hide();
+            this.locations = this.getLocations();
           })
-          .catch(error => {
-            this.$vToastify.error(error, "Error");
+          .catch(() => {
+            this.$vToastify.error(
+              "Ops, ocorreu um erro interno. Verifique os dados.",
+              "Erro"
+            );
+            this.hide();
           });
       });
     }
@@ -191,6 +199,36 @@ export default {
       color: #fff;
       font-weight: bold;
       font-size: 16px;
+    }
+
+    .btns {
+      margin-top: 10px;
+      float: right;
+    }
+
+    .btn-cancelar,
+    .btn {
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 14px;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    .btn-cancelar {
+      border: solid 1px #e0e0e0;
+      background: #fff;
+
+      color: #c21712;
+      margin-right: 10px;
+    }
+
+    .btn {
+      background: #c21712;
+      color: #fff;
     }
   }
 }

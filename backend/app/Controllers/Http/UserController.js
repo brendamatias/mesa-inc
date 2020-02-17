@@ -72,6 +72,7 @@ class UserController {
           }
         });
       }
+
       if (data.password != data.confirmPassword) {
         return response.status(400).json({
           error: {
