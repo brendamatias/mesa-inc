@@ -10,7 +10,8 @@ import {
   faSignOutAlt,
   faSave,
   faStar,
-  faPlus
+  faPlus,
+  faHeart
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.use(VueGoogleMaps, {
@@ -27,7 +28,7 @@ Vue.use(VueToastify, {
 
 Vue.use(VModal);
 
-library.add(faSignOutAlt, faSave, faStar, faPlus);
+library.add(faSignOutAlt, faSave, faStar, faPlus, faHeart);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

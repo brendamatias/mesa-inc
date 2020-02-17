@@ -1,77 +1,53 @@
 <template>
   <section>
     <modal name="new-location" id="new-location" :width="600" :height="650">
-      <h1 class="title">Nova Localização</h1>
+      <ModalNewLocation />
+    </modal>
 
-      <form v-on:submit.prevent="createNewLocation">
-        <label for="street">Nome</label>
-        <input
-          name="name"
-          type="text"
-          id="name"
-          v-model="newLocation.name"
-          required
-        />
+    <modal
+      name="details-location"
+      id="details-location"
+      :width="600"
+      :height="650"
+    >
+      <ModalDetailsLocation />
+    </modal>
 
-        <label for="street">Rua</label>
-        <input
-          name="street"
-          type="text"
-          id="street"
-          v-model="newLocation.street"
-          required
-        />
-
-        <label for="number">Número</label>
-        <input
-          name="number"
-          type="text"
-          id="number"
-          v-model="newLocation.number"
-          required
-        />
-
-        <label for="neighborhood">Bairro</label>
-        <input
-          name="neighborhood"
-          type="text"
-          id="neighborhood"
-          v-model="newLocation.neighborhood"
-          required
-        />
-
-        <label for="state">Estado</label>
-        <select v-model="state" v-on:change="getCities">
-          <option disabled value="disabled">Escolha um estado</option>
-          <option v-for="state in states" :key="state.id" :value="state">{{
-            state.sigla
-          }}</option>
-        </select>
-
-        <label for="city">Cidade</label>
-        <select v-model="city">
-          <option disabled value="disabled">Escolha uma cidade</option>
-          <option v-for="city in cities" :key="city.id" :value="city.nome">{{
-            city.nome
-          }}</option>
-        </select>
-
-        <button>Cadastrar</button>
-      </form>
+    <modal
+      name="evaluation-location"
+      id="evaluation-location"
+      :width="600"
+      :height="450"
+    >
+      <ModalEvaluationLocation />
     </modal>
 
     <div class="locations">
       <div class="header">
         <p>Localizações</p>
-        <button><font-awesome-icon icon="plus" @click="show" /></button>
+        <button v-on:click="show('new-location')">
+          <font-awesome-icon icon="plus" />
+        </button>
       </div>
       <ul>
         <li v-for="location in locations" :key="location.id">
           <div>
-            <strong>{{ location.name }} </strong>
+            <button
+              class="name"
+              v-on:click="showDetails('details-location', location.id)"
+            >
+              <strong>{{ location.name }} </strong>
+            </button>
             <span>{{ location.address }}</span>
           </div>
-          <font-awesome-icon icon="star" />
+          <div>
+            <button
+              class="start"
+              v-on:click="showDetails('evaluation-location', location.id)"
+            >
+              <strong><font-awesome-icon icon="star"/></strong>
+            </button>
+          </div>
         </li>
       </ul>
     </div>
@@ -80,34 +56,28 @@
 </template>
 
 <script>
+import ModalNewLocation from "../components/ModalNewLocation";
+import ModalDetailsLocation from "../components/ModalDetailsLocation";
+import ModalEvaluationLocation from "../components/ModalEvaluationLocation";
 import GoogleMap from "../components/GoogleMap";
+
 import axios from "axios";
 
 export default {
   name: "home",
-  data() {
-    return {
-      state: "disabled",
-      states: [],
-      city: "disabled",
-      cities: [],
-      newLocation: {
-        name: "Antiga casa da Brenda",
-        street: "Demócrito de Souza Filho",
-        number: "300",
-        neighborhood: "Madalena",
-        latitude: "",
-        longitude: ""
-      },
-      locations: [],
-      errors: []
-    };
-  },
   components: {
+    ModalNewLocation,
+    ModalDetailsLocation,
+    ModalEvaluationLocation,
     GoogleMap
   },
+  data() {
+    return {
+      locations: [],
+      selectLocation: []
+    };
+  },
   mounted() {
-    this.getStates();
     this.getLocations();
   },
   methods: {
@@ -115,28 +85,14 @@ export default {
       await this.$store.dispatch("getLocations");
       this.locations = this.$store.state.locations;
     },
-    async getStates() {
-      const { data } = await axios.get(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-      );
-
-      this.states = data;
+    show(modal) {
+      this.$modal.show(modal);
     },
-    async getCities() {
-      const { data } = await axios.get(
-        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${this.state.id}/distritos`
-      );
-
-      this.cities = data;
-    },
-    show() {
-      this.$modal.show("new-location");
-    },
-    hide() {
-      this.$modal.hide("new-location");
+    showDetails(modal, selectLocation) {
+      this.$modal.show(modal);
+      console.log(selectLocation);
     },
     async createNewLocation() {
-      console.log(this.state.sigla);
       if (this.state === "disabled") {
         return this.$vToastify.error("Necessário informar o estado.", "Erro");
       }
@@ -185,56 +141,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#new-location {
-  h1.title {
-    font-size: 18px;
-    background: #a01614;
-    padding: 15px;
-    text-align: center;
-    color: #fff;
-  }
-
-  form {
-    width: 450px;
-    margin: 20px auto 0 auto;
-
-    label {
-      margin-bottom: 7px;
-      color: #24292e;
-      font-weight: 600;
-    }
-
-    input,
-    select {
-      display: block;
-      padding: 10px 15px;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      width: 100%;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-
-    button {
-      background: #c21712;
-      padding: 10px 25px;
-      margin-top: 10px;
-
-      border: none;
-      border-radius: 5px;
-
-      color: #fff;
-      font-weight: bold;
-      font-size: 16px;
-    }
-  }
-}
-
 section {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #eee;
+
+  button {
+    border: none;
+    background: none;
+  }
 
   .locations {
     padding: 20px 30px;
@@ -253,11 +169,6 @@ section {
       button {
         color: #fff;
         font-size: 16px;
-      }
-
-      button {
-        border: none;
-        background: none;
       }
     }
 
@@ -279,6 +190,9 @@ section {
         align-items: center;
         justify-content: space-between;
 
+        .start {
+        }
+
         div {
           padding-right: 10px;
         }
@@ -287,7 +201,7 @@ section {
           color: #353535;
         }
 
-        strong {
+        .name {
           display: block;
         }
 

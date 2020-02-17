@@ -12,12 +12,13 @@ class EvaluationController {
     return evaluations;
   }
 
-  async store({ params, request }) {
-    const data = request.only(["user_id", "rating", "comment"]);
+  async store({ params, request, auth }) {
+    const data = request.only(["rating", "comment"]);
 
     const evaluation = await Evaluation.create({
       ...data,
-      location_id: params.locations_id
+      location_id: params.locations_id,
+      user_id: auth.user.id
     });
 
     return evaluation;
