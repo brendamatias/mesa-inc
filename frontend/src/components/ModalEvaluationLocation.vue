@@ -5,10 +5,7 @@
     <div class="container">
       <div class="header">
         <div>
-          <img
-            src="https://api.adorable.io/avatars/285/abott@adorable.png"
-            alt="Perfil"
-          />
+          <img src="https://api.adorable.io/avatars/285/abott@adorable.png" alt="Perfil" />
         </div>
         <div>
           <strong>Brenda Matias</strong>
@@ -71,7 +68,8 @@
         <div class="btns">
           <button class="btn-cancelar" @click="hide">Cancelar</button>
           <button type="submit" class="btn" @click="evaluate">
-            Avaliar
+            <font-awesome-icon icon="spinner" class="fa-spin" v-if="loading" />
+            <span v-else>Avaliar</span>
           </button>
         </div>
       </div>
@@ -84,8 +82,15 @@ import { api } from "../services/api.js";
 
 export default {
   name: "ModalEvaluationLocation",
+  props: {
+    locationSelect: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
+      loading: false,
       rating: 0,
       comment: ""
     };
@@ -98,7 +103,8 @@ export default {
       this.$modal.hide("evaluation-location");
     },
     evaluate() {
-      const id = 5;
+      const id = this.locationSelect;
+
       const evaluation = { rating: this.rating, comment: this.comment };
 
       if (this.rating === 0) {
@@ -109,6 +115,8 @@ export default {
         return this.$vToastify.error("Por favor, deixe um comentário", "Erro");
       }
 
+      this.loading = true;
+
       api
         .post(`/locations/${id}/evaluations`, evaluation)
         .then(() => {
@@ -117,6 +125,7 @@ export default {
             "Sucesso"
           );
 
+          this.loading = false;
           this.hide();
         })
         .catch(() => {
@@ -124,6 +133,9 @@ export default {
             "Ops, ocorreu um erro interno. Verifique os dados.",
             "Erro"
           );
+
+          this.loading = false;
+
           this.hide();
         });
     }

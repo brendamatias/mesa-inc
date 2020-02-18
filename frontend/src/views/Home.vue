@@ -4,48 +4,34 @@
       <ModalNewLocation />
     </modal>
 
-    <modal
-      name="details-location"
-      id="details-location"
-      :width="600"
-      :height="650"
-    >
-      <ModalDetailsLocation />
+    <modal name="details-location" id="details-location" :width="600" :height="650">
+      <ModalDetailsLocation :locationSelect="locationSelect" />
     </modal>
 
-    <modal
-      name="evaluation-location"
-      id="evaluation-location"
-      :width="600"
-      :height="450"
-    >
-      <ModalEvaluationLocation />
+    <modal name="evaluation-location" id="evaluation-location" :width="600" :height="450">
+      <ModalEvaluationLocation :locationSelect="locationSelect" />
     </modal>
 
     <div class="locations">
       <div class="header">
         <p>Localizações</p>
-        <button v-on:click="show('new-location')">
+        <button v-on:click="show('new-location', '')">
           <font-awesome-icon icon="plus" />
         </button>
       </div>
       <ul>
         <li v-for="location in locations" :key="location.id">
           <div>
-            <button
-              class="name"
-              v-on:click="showDetails('details-location', location.id)"
-            >
-              <strong>{{ location.name }} </strong>
+            <button class="name" v-on:click="show('details-location', location.id)">
+              <strong>{{ location.name }}</strong>
             </button>
             <span>{{ location.address }}</span>
           </div>
           <div>
-            <button
-              class="start"
-              v-on:click="showDetails('evaluation-location', location.id)"
-            >
-              <strong><font-awesome-icon icon="star"/></strong>
+            <button v-on:click="show('evaluation-location', location.id)">
+              <strong>
+                <font-awesome-icon icon="star" />
+              </strong>
             </button>
           </div>
         </li>
@@ -72,7 +58,7 @@ export default {
   data() {
     return {
       locations: [],
-      selectLocation: []
+      locationSelect: ""
     };
   },
   mounted() {
@@ -83,12 +69,12 @@ export default {
       await this.$store.dispatch("getLocations");
       this.locations = this.$store.state.locations;
     },
-    show(modal) {
+    show(modal, locationSelect) {
+      if (!(locationSelect === "")) {
+        this.locationSelect = locationSelect;
+      }
+
       this.$modal.show(modal);
-    },
-    showDetails(modal, selectLocation) {
-      this.$modal.show(modal);
-      console.log(selectLocation);
     }
   },
   created() {
@@ -147,12 +133,10 @@ section {
         align-items: center;
         justify-content: space-between;
 
-        .start {
-        }
-
         div {
           padding-right: 10px;
         }
+
         svg {
           font-size: 20px;
           color: #353535;

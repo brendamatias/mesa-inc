@@ -4,31 +4,13 @@
 
     <form v-on:submit.prevent="createNewLocation">
       <label for="street">Nome</label>
-      <input
-        name="name"
-        type="text"
-        id="name"
-        v-model="newLocation.name"
-        required
-      />
+      <input name="name" type="text" id="name" v-model="newLocation.name" required />
 
       <label for="street">Rua</label>
-      <input
-        name="street"
-        type="text"
-        id="street"
-        v-model="newLocation.street"
-        required
-      />
+      <input name="street" type="text" id="street" v-model="newLocation.street" required />
 
       <label for="number">Número</label>
-      <input
-        name="number"
-        type="text"
-        id="number"
-        v-model="newLocation.number"
-        required
-      />
+      <input name="number" type="text" id="number" v-model="newLocation.number" required />
 
       <label for="neighborhood">Bairro</label>
       <input
@@ -42,23 +24,28 @@
       <label for="state">Estado</label>
       <select v-model="state" v-on:change="getCities">
         <option disabled value="disabled">Escolha um estado</option>
-        <option v-for="state in states" :key="state.id" :value="state">{{
+        <option v-for="state in states" :key="state.id" :value="state">
+          {{
           state.sigla
-        }}</option>
+          }}
+        </option>
       </select>
 
       <label for="city">Cidade</label>
       <select v-model="city">
         <option disabled value="disabled">Escolha uma cidade</option>
-        <option v-for="city in cities" :key="city.id" :value="city.nome">{{
+        <option v-for="city in cities" :key="city.id" :value="city.nome">
+          {{
           city.nome
-        }}</option>
+          }}
+        </option>
       </select>
 
       <div class="btns">
         <button class="btn-cancelar" @click="hide">Cancelar</button>
         <button type="submit" class="btn">
-          Cadastrar
+          <font-awesome-icon icon="spinner" class="fa-spin" v-if="loading" />
+          <span v-else>Cadastrar</span>
         </button>
       </div>
     </form>
@@ -72,6 +59,7 @@ export default {
   name: "ModalNewLocation",
   data() {
     return {
+      loading: false,
       state: "disabled",
       states: [],
       city: "disabled",
@@ -116,6 +104,8 @@ export default {
         return this.$vToastify.error("Necessário informar a cidade.", "Erro");
       }
 
+      this.loading = true;
+
       let name = this.newLocation.name;
       let street = this.newLocation.street.trim().replace(/ /g, "+");
       let city = this.city.trim().replace(/ /g, "+");
@@ -143,12 +133,14 @@ export default {
             );
             this.hide();
             this.locations = this.getLocations();
+            this.loading = false;
           })
           .catch(() => {
             this.$vToastify.error(
               "Ops, ocorreu um erro interno. Verifique os dados.",
               "Erro"
             );
+            this.loading = false;
             this.hide();
           });
       });

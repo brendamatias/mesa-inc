@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div class="details">
+    <div v-if="loading" class="loading">
+      <font-awesome-icon icon="spinner" class="fa-spin" />
+    </div>
+    <div v-else class="details">
       <div class="resume">
         <div class="header">
           <div>
-            <strong>CAPSi Cléa Lacet</strong>
-            <span>R. Emília Torreão, 145 - Afogados, Recife - PE </span>
+            <strong>{{ location.name }}</strong>
+            <span>{{ location.address }}</span>
           </div>
 
           <button class="btn">
-            <font-awesome-icon icon="star" />
-            Favoritar
+            <font-awesome-icon icon="star" />Favoritar
           </button>
         </div>
 
@@ -31,20 +33,19 @@
           </div>
         </div>
       </div>
-
       <span class="title">Comentários</span>
-      <ul>
+      <div v-if="evaluations.length === 0" class="not-value">
+        <span>Ops, essa localização não foi avaliada por nenhum usuário :(</span>
+        <button class="btn" v-on:click="show('evaluation-location')">Avaliar</button>
+      </div>
+      <ul v-else>
         <li v-for="evaluation in evaluations" :key="evaluation.id">
-          <img
-            src="https://api.adorable.io/avatars/285/abott@adorable.png"
-            alt="Perfil"
-          />
+          <img src="https://api.adorable.io/avatars/285/abott@adorable.png" alt="Perfil" />
           <div>
             <strong>{{ evaluation.user.name }}</strong>
             <p>{{ evaluation.comment }}</p>
             <button>
-              <font-awesome-icon icon="heart" />
-              Gostei
+              <font-awesome-icon icon="heart" />Gostei
             </button>
           </div>
         </li>
@@ -58,27 +59,52 @@ import { api } from "../services/api.js";
 
 export default {
   name: "ModalDetailsLocation",
+  props: {
+    locationSelect: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
+      loading: true,
       evaluations: [],
       scores: [],
-      locations: {},
-      average: "",
-      evaluationsLength: ""
+      location: [],
+      average: 0,
+      evaluationsLength: 0
     };
   },
   mounted() {
+    this.getLocation();
     this.getEvaluations();
   },
   methods: {
+    show(modal) {
+      this.$modal.show(modal);
+      this.$modal.hide("details-location");
+    },
+    getLocation() {
+      const id = this.locationSelect;
+
+      this.loading = true;
+
+      api.get(`/locations/${id}`).then(res => {
+        this.location = res.data;
+        this.loading = false;
+      });
+    },
     getEvaluations() {
-      const id = 5;
+      const id = this.locationSelect;
+      this.loading = true;
 
       api.get(`/locations/${id}/evaluations`).then(res => {
         this.evaluations = res.data;
         this.evaluationsLength = res.data.length;
         this.average = this.returnAverage(res.data);
         this.getScores();
+
+        this.loading = false;
       });
     },
     getScores() {
@@ -112,6 +138,10 @@ export default {
       const length = array.length;
       let result = 0;
 
+      if (length === 0) {
+        return 0;
+      }
+
       for (let i = 0; i < length; i++) {
         if (array[i].rating === id) {
           result = result + 1;
@@ -125,6 +155,10 @@ export default {
     returnAverage(data) {
       let result = 0;
       const length = data.length;
+
+      if (length === 0) {
+        return 0;
+      }
 
       for (let i = 0; i < length; i++) {
         result = result + data[i].rating;
@@ -141,12 +175,40 @@ export default {
 
 <style lang="scss">
 #details-location {
+  .loading {
+    font-size: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 650px;
+    color: #c21712;
+  }
+
   .details {
     padding: 40px;
 
     .title {
       color: #222;
       font-size: 18px;
+    }
+  }
+
+  button {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    height: 42px;
+    border: 0;
+
+    border-radius: 5px;
+    background: #c21712;
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+
+    svg {
+      margin-right: 5px;
     }
   }
 
@@ -167,25 +229,6 @@ export default {
       span {
         color: #999;
         font-size: 13px;
-      }
-
-      button {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        padding: 0 25px;
-        height: 42px;
-        border: 0;
-
-        border-radius: 5px;
-        background: #c21712;
-        font-size: 14px;
-        color: #fff;
-        font-weight: bold;
-
-        svg {
-          margin-right: 5px;
-        }
       }
     }
 
@@ -240,6 +283,19 @@ export default {
 
     .orange {
       background: #e7711b;
+    }
+  }
+
+  .not-value {
+    margin-top: 80px;
+    text-align: center;
+
+    span {
+      font-weight: bold;
+    }
+
+    button {
+      margin: 30px auto 0 auto;
     }
   }
 
