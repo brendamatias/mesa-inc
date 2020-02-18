@@ -20,7 +20,7 @@ class UserController {
     const err = await validateStore(data);
 
     if (err) {
-      return response.status(400).json(err);
+      return response.status(400).send(err);
     }
 
     const user = await User.create(data);
@@ -44,41 +44,35 @@ class UserController {
       return response.status(400).json(err);
     }
 
-    //VERIFICAR!!!!
-    // if (data.email && data.email !== user.email) {
-    //   console.log(data.email);
-    //   console.log(user.email);
-    //   const rules = {
-    //     email: "unique:users"
-    //   };
+    if (data.email && data.email !== user.email) {
+      const existUser = await User.findBy("email", data.email);
 
-    //   const validation = await validate(data.email, rules);
-
-    //   if (validation) {
-    //     return response.status(400).json({
-    //       error: { message: "E-mail já cadastrado." }
-    //     });
-    //   }
-    // }
+      if (existUser) {
+        if (existUser.id != user.id) {
+          return response
+            .status(400)
+            .json([{ message: "E-mail já cadastrado." }]);
+        }
+      }
+    }
 
     if (data.oldPassword) {
       const checkPassword = await Hash.verify(data.oldPassword, user.password);
 
       if (!checkPassword) {
-        console.log("oi");
-        return response.status(400).json({
-          error: {
+        return response.status(400).json([
+          {
             message: "Ops, senha antiga inválida."
           }
-        });
+        ]);
       }
 
       if (data.password != data.confirmPassword) {
-        return response.status(400).json({
-          error: {
+        return response.status(400).json([
+          {
             message: "Ops, a confirmação de senha não corresponde à senha."
           }
-        });
+        ]);
       }
     }
 

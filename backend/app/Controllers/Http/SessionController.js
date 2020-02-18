@@ -9,9 +9,7 @@ class SessionController {
     const user = await User.findBy("email", email);
 
     if (!user) {
-      return response.status(400).send({
-        error: { message: "Email não cadastrado." }
-      });
+      return response.status(400).send([{ message: "Email não cadastrado." }]);
     }
 
     const { id, name } = user;

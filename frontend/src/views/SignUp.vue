@@ -12,24 +12,10 @@
         <input name="name" type="name" id="name" v-model="user.name" required />
 
         <label for="email">E-mail</label>
-        <input
-          name="email"
-          type="email"
-          id="email"
-          v-model="user.email"
-          required
-        />
+        <input name="email" type="email" id="email" v-model="user.email" required />
 
-        <label for="password">
-          Senha
-        </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="user.password"
-          required
-        />
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" v-model="user.password" required />
 
         <button>Cadastrar</button>
       </form>
@@ -52,9 +38,9 @@ export default {
       logo: logo,
       logoWhite: logoWhite,
       user: {
-        name: "",
-        email: "",
-        password: ""
+        name: "Brenda",
+        email: "brenda@mesainc.com.br",
+        password: "123456"
       }
     };
   },
@@ -65,11 +51,14 @@ export default {
         .then(() => {
           this.$router.push({ name: "home" });
         })
-        .catch(() => {
-          this.$vToastify.error(
-            "Ocorreu um erro. Verifique seus dados.",
-            "Erro"
-          );
+        .catch(err => {
+          var error = "Ops, ocorreu um erro interno.";
+
+          if (err.response.data.length > 0) {
+            error = err.response.data[0].message;
+          }
+
+          this.$vToastify.error(error, "Erro");
         });
     }
   },

@@ -128,11 +128,14 @@ export default {
           this.loading = false;
           this.hide();
         })
-        .catch(() => {
-          this.$vToastify.error(
-            "Ops, ocorreu um erro interno. Verifique os dados.",
-            "Erro"
-          );
+        .catch(err => {
+          var error = "Ops, ocorreu um erro interno.";
+
+          if (err.response.data.length > 0) {
+            error = err.response.data[0].message;
+          }
+
+          this.$vToastify.error(error, "Erro");
 
           this.loading = false;
 

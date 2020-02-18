@@ -15,12 +15,7 @@
           Senha
           <a class="label-link" target="_black" href="#">Esqueceu sua senha?</a>
         </label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          v-model="user.password"
-        />
+        <input type="password" name="password" id="password" v-model="user.password" />
 
         <button>Entrar</button>
       </form>
@@ -55,11 +50,14 @@ export default {
         .then(() => {
           this.$router.push({ name: "home" });
         })
-        .catch(() => {
-          this.$vToastify.error(
-            "Ocorreu um erro. Verifique seus dados.",
-            "Erro"
-          );
+        .catch(err => {
+          var error = "Ops, ocorreu um erro interno.";
+
+          if (err.response.data.length > 0) {
+            error = err.response.data[0].message;
+          }
+
+          this.$vToastify.error(error, "Erro");
         });
     }
   },

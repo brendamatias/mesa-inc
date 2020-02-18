@@ -1,18 +1,7 @@
 <template>
   <form v-on:submit.prevent="updateUser">
-    <input
-      name="name"
-      placeholder="Seu nome completo"
-      v-model="name"
-      required
-    />
-    <input
-      name="email"
-      type="email"
-      placeholder="Seu e-mail"
-      v-model="email"
-      required
-    />
+    <input name="name" placeholder="Seu nome completo" v-model="name" required />
+    <input name="email" type="email" placeholder="Seu e-mail" v-model="email" required />
 
     <hr />
 
@@ -22,12 +11,7 @@
       placeholder="Sua senha atual"
       v-model="user.oldPassword"
     />
-    <input
-      name="password"
-      type="password"
-      placeholder="Sua nova senha"
-      v-model="user.password"
-    />
+    <input name="password" type="password" placeholder="Sua nova senha" v-model="user.password" />
     <input
       name="confirmPassword"
       type="password"
@@ -93,12 +77,19 @@ export default {
         .then(() => {
           this.$vToastify.success("Perfil atualizado com sucesso!", "Sucesso");
         })
-        .catch(() => {
-          this.$vToastify.error(
-            "Ocorreu um erro na atualização do seu perfil. Verifique seus dados.",
-            "Erro"
-          );
+        .catch(err => {
+          var error = "Ops, ocorreu um erro interno.";
+
+          if (err.response.data.length > 0) {
+            error = err.response.data[0].message;
+          }
+
+          this.$vToastify.error(error, "Erro");
         });
+
+      this.user.password = "";
+      this.user.oldPassword = "";
+      this.user.confirmPassword = "";
     }
   },
   created() {
