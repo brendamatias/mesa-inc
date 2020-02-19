@@ -31,7 +31,10 @@ class EvaluationController {
   }
 
   async show({ params }) {
-    const evaluation = await Evaluation.findOrFail(params.id);
+    const evaluation = await Evaluation.query()
+      .where("location_id", "=", params.locations_id)
+      .where("user_id", "=", params.id)
+      .fetch();
 
     return evaluation;
   }

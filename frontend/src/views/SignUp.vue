@@ -38,9 +38,9 @@ export default {
       logo: logo,
       logoWhite: logoWhite,
       user: {
-        name: "Brenda",
-        email: "brenda@mesainc.com.br",
-        password: "123456"
+        name: "",
+        email: "",
+        password: ""
       }
     };
   },

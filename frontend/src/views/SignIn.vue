@@ -38,8 +38,8 @@ export default {
       logo: logo,
       logoWhite: logoWhite,
       user: {
-        email: "brenda@mesainc.com.br",
-        password: "1234567"
+        email: "",
+        password: ""
       }
     };
   },
