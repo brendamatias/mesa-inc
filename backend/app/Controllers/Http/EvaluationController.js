@@ -15,6 +15,12 @@ class EvaluationController {
   async store({ params, request, auth }) {
     const data = request.only(["rating", "comment"]);
 
+    // Para não ocorrer duplicidade //
+    await Evaluation.query()
+      .where("user_id", "=", auth.user.id)
+      .where("location_id", "=", params.locations_id)
+      .delete();
+
     const evaluation = await Evaluation.create({
       ...data,
       location_id: params.locations_id,

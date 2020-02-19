@@ -145,7 +145,6 @@ export default {
             this.$vToastify.error(error, "Erro");
 
             this.loading = false;
-            this.hide();
           });
       });
     }

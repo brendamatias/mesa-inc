@@ -14,17 +14,14 @@ class LocationController {
   async store({ request, response, auth }) {
     const data = request.only(["name", "address", "latitude", "longitude"]);
 
-    const locationExists = await Location.query()
-      .where("latitude", data.latitude)
-      .where("longitude", data.longitude)
-      .fetch();
+    const locationExists = await Location.findBy("address", data.address);
 
-    //VERIFICAR
-    // if (locationExists) {
-    //   return response.status(400).send({
-    //     error: { message: "Localidade já cadastrada." }
-    //   });
-    // }
+    if (locationExists) {
+      console.log(locationExists);
+      return response
+        .status(400)
+        .json([{ message: "Localidade já cadastrada." }]);
+    }
 
     const location = await Location.create({
       ...data,
