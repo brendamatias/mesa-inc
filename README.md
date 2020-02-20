@@ -48,6 +48,7 @@ O projeto consiste em uma aplicação que visa disponibilizar as localizações 
 - Instale o AdonisJs caso necessário: `npm i -g @adonisjs/cli`;
 - Execute o seguinte comando para executar as migrações: `adonis migration:run`;
 - Execute as seed da aplicação: `adonis seed`;
+- Gere a chave da sua aplicação: `adonis key:generate`;
 - Inicie a aplicação: `adonis serve --dev`;
 
 ## :art: Front-end
