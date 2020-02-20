@@ -1,0 +1,7 @@
+version: "3.0"
+services:
+  database:
+    image: postgres
+    container_name: dbmesainc
+    ports:
+      - "5432:5432"
