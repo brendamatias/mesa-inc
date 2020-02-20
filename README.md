@@ -32,7 +32,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## :computer: Projeto
 
-O projeto é uma aplicação que visa disponibilizar localizações mais próximas ao usuário autenticado. As localizações podem ser cadastradas pelos usuários, afim de poder avaliá-las para compartilhar suas experiências.
+O projeto consiste em uma aplicação que visa disponibilizar as localizações mais próximas aos usuários autenticados, onde as mesmas podem ser cadastradas e avaliadas pelos usuários, possibilitando assim um compartilhamento de experiências dentro da aplicação.
 
 ## :rocket: Iniciando aplicação
 
@@ -51,7 +51,7 @@ O projeto é uma aplicação que visa disponibilizar localizações mais próxim
 
 ## :art: Front-end
 
-- Mova-se para diretório da aplicação back-end: `cd frontend`;
+- Mova-se para diretório da aplicação front-end: `cd frontend`;
 - Execute `yarn install` ou `npm install` para instalar as dependências;
 - Inicie a aplicação com `yarn serve` ou `npm serve`;
 
