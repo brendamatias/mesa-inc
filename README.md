@@ -36,18 +36,19 @@ O projeto consiste em uma aplicação que visa disponibilizar as localizações 
 
 ## :rocket: Iniciando aplicação
 
-- Clone este repositório usando `git clone git@github.com:brendamatias/mesa-inc.git`;
+- Clone este repositório usando `git clone https://github.com/brendamatias/mesa-inc.git`;
 - Mova-se para diretório da aplicação: `cd mesa-inc`;
 
 ## :door: Back-end
 
 - Mova-se para diretório da aplicação back-end: `cd backend`;
-- Crie e inicie o container e o banco de dados: `docker-compose up -d`
+- Crie e inicie o container e o banco de dados: `docker-compose up -d`;
 - Execute `yarn install` ou `npm install` para instalar as dependências;
 - Duplique o arquivo `.env.example` para `.env` para leitura das variáveis;
-- Execute o seguinte comando para executar as migrações: `adonis migration:run`
-- Execute as seed da aplicação: `adonis seed`
-- Inicie a aplicação: `adonis serve --dev`
+- Instale o AdonisJs caso necessário: `npm i -g @adonisjs/cli`;
+- Execute o seguinte comando para executar as migrações: `adonis migration:run`;
+- Execute as seed da aplicação: `adonis seed`;
+- Inicie a aplicação: `adonis serve --dev`;
 
 ## :art: Front-end
 
