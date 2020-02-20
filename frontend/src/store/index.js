@@ -34,11 +34,7 @@ export default new Vuex.Store({
       });
     },
     signUp(context, payload) {
-      return api.post("/users", payload).then(res => {
-        context.commit("UPDATE_USER", payload);
-        context.commit("UPDATE_LOGIN", true);
-        window.localStorage.token = `Bearer ${res.data.token.token}`;
-      });
+      return api.post("/users", payload);
     },
     signIn(context, payload) {
       return api.post("/sessions", payload).then(res => {

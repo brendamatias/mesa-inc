@@ -49,7 +49,8 @@ export default {
       this.$store
         .dispatch("signUp", this.user)
         .then(() => {
-          this.$router.push({ name: "home" });
+          this.$vToastify.success("Usuário cadastrado com sucesso!", "Sucesso");
+          this.$router.push("/");
         })
         .catch(err => {
           var error = "Ops, ocorreu um erro interno.";
