@@ -124,9 +124,8 @@ export default {
             "Avaliação cadastrada com sucesso!",
             "Sucesso"
           );
-
           this.loading = false;
-          this.hide();
+          location.reload();
         })
         .catch(err => {
           var error = "Ops, ocorreu um erro interno.";

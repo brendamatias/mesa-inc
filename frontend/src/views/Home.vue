@@ -30,7 +30,7 @@
           <div>
             <button v-on:click="show('evaluation-location', location.id)">
               <strong>
-                <font-awesome-icon icon="star" />
+                <font-awesome-icon icon="star" v-bind="getFav(location.id)" :id="location.id" />
               </strong>
             </button>
           </div>
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { api } from "../services/api.js";
+
 import ModalNewLocation from "../components/ModalNewLocation";
 import ModalDetailsLocation from "../components/ModalDetailsLocation";
 import ModalEvaluationLocation from "../components/ModalEvaluationLocation";
@@ -65,6 +67,14 @@ export default {
     this.getLocations();
   },
   methods: {
+    async getFav(id) {
+      api.get(`/locations/${id}/evaluations`).then(res => {
+        if (res.data.length > 0) {
+          var element = document.getElementById(`${id}`);
+          element.classList.add("fav");
+        }
+      });
+    },
     async getLocations() {
       await this.$store.dispatch("getLocations");
       this.locations = this.$store.state.locations;
@@ -151,6 +161,10 @@ section {
         }
       }
     }
+  }
+
+  .fav {
+    color: #e7711b !important;
   }
 }
 </style>
