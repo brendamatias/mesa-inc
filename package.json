@@ -28,10 +28,14 @@
     "@adonisjs/validator": "^5.0.6",
     "@adonisjs/vow": "^1.0.17",
     "moment": "^2.24.0",
-    "pg": "^7.18.1"
+    "pg": "^7.18.1",
+    "url-parse": "^1.4.7"
   },
   "devDependencies": {},
   "autoload": {
     "App": "./app"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }
