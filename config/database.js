@@ -16,9 +16,9 @@ module.exports = {
     connection: {
       host: Env.get("DB_HOST", DATABASE_URL.host),
       port: Env.get("DB_PORT", ""),
-      user: Env.get("DB_USER", DATABASE_URL.user),
+      user: Env.get("DB_USER", DATABASE_URL.username),
       password: Env.get("DB_PASSWORD", DATABASE_URL.password),
-      database: Env.get("DB_DATABASE", DATABASE_URL.database)
+      database: Env.get("DB_DATABASE", DATABASE_URL.pathname)
     },
     debug: Env.get("DB_DEBUG", false)
   }
