@@ -15,9 +15,10 @@ import {
   faSpinner
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyBJSI1G4JlXXbceQiPksP8cgo8OMd1TQ4A",
+    key: process.env.VUE_APP_GOOGLE_KEY,
     libraries: "places",
     installComponents: true
   }
